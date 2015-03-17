@@ -84,6 +84,25 @@ public:
 		*this = *this * rhs;
 		return *this;
 	}
+	
+	Vec3 operator * ( const Vec3 &vec )
+	{
+		Vec3 result;
+		float temp[4] = { vec[0], vec[1], vec[2], 1.0f };
+		
+		for( int row = 0; row < 4; ++row )
+		{
+			float sum = 0.0f;
+			for( int col = 0; col < 4; ++col )
+			{
+				sum += fValues[row][col] * temp[col];
+			}
+			
+			result[row] = sum;
+		}
+		
+		return result;
+	}
 
 	// Multiply 16 Vec3s by this matrix.	
 	void mulVec(vecf16_t outVec[4], const vecf16_t inVec[4]) const
@@ -246,6 +265,33 @@ public:
 		};
 
 		return Matrix(cameraValues) * getTranslationMatrix(-location);		
+	}
+	
+	void LookAt( const Vec3 &eye, const Vec3 &center, const Vec3 &up )
+	{
+		Vec3 f = (center - eye).normalized();
+		Vec3 s = f.crossProduct( up );
+		Vec3 u = s.normalized().crossProduct( f );
+		
+		fValues[0][0] = s[0];
+		fValues[0][1] = s[1];
+		fValues[0][2] = s[2];
+		fValues[0][3] = 0.0f;
+		
+		fValues[1][0] = u[0];
+		fValues[1][1] = u[1];
+		fValues[1][2] = u[2];
+		fValues[1][3] = 0.0f;
+		
+		fValues[2][0] = -f[0];
+		fValues[2][1] = -f[1];
+		fValues[2][2] = -f[2];
+		fValues[2][3] = 0.0f;
+		
+		fValues[3][0] = 0.0f;
+		fValues[3][1] = 0.0f;
+		fValues[3][2] = 0.0f;
+		fValues[3][3] = 1.0f;
 	}
 
 private:
