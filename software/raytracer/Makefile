@@ -37,9 +37,11 @@ raytracer.elf:
 	$(CC) $(CFLAGS) raytracer.cpp math/sphere.cpp graphics/camera.cpp $(LIBS) -o raytracer.elf
 
 raytracer.hex: raytracer.elf
+	@echo "Creating raytracer.hex"
 	$(ELF2HEX) -o raytracer.hex raytracer.elf
 
 run: raytracer.hex
+	@echo "Starting emulator"
 	$(EMULATOR) -f 800x600 -t 1 raytracer.hex
 
 clean:
