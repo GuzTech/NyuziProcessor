@@ -49,6 +49,31 @@ public:
 
 		return newVal;
 	}
+	
+	Vec3 operator + ( const float other ) const
+	{
+		Vec3 result;
+		for( int i = 0; i < 3; ++i )
+		{
+			result.fValues[ i ] = fValues[ i ] + other;
+		}
+		
+		return result;
+	}
+	
+	void operator += ( const Vec3 &other )
+	{
+		fValues[0] += other.fValues[0];
+		fValues[1] += other.fValues[1];
+		fValues[2] += other.fValues[2];
+	}
+	
+	void operator += ( const float other )
+	{
+		fValues[0] += other;
+		fValues[1] += other;
+		fValues[2] += other;
+	}
 
 	Vec3 operator-(const Vec3 &other) const
 	{
@@ -59,6 +84,31 @@ public:
 		return newVal;
 	}
 	
+	Vec3 operator - ( const float other ) const
+	{
+		Vec3 result;
+		for( int i = 0; i < 3; ++i )
+		{
+			result.fValues[ i ] = fValues[ i ] - other;
+		}
+		
+		return result;
+	}
+	
+	void operator -= ( const Vec3 &other )
+	{
+		fValues[0] -= other.fValues[0];
+		fValues[1] -= other.fValues[1];
+		fValues[2] -= other.fValues[2];
+	}
+	
+	void operator -= ( const float other )
+	{
+		fValues[0] -= other;
+		fValues[1] -= other;
+		fValues[2] -= other;
+	}
+	
 	Vec3 operator*(float other) const
 	{
 		Vec3 newVal;
@@ -66,6 +116,14 @@ public:
 			newVal.fValues[i] = fValues[i] * other;
 
 		return newVal;
+	}
+	
+	void operator *= ( const float other )
+	{
+		for( int i = 0; i < 3; ++i )
+		{
+			fValues[ i ] *= other;
+		}
 	}
 
 	Vec3 operator/(float other) const
@@ -76,6 +134,14 @@ public:
 			newVal.fValues[i] = fValues[i] * denom;
 
 		return newVal;
+	}
+	
+	void operator /= ( const float other )
+	{
+		for( int i = 0; i < 3; ++i )
+		{
+			fValues[ i ] /= other;
+		}
 	}
 
 	float magnitude() const
@@ -90,6 +156,11 @@ public:
 	Vec3 normalized() const
 	{
 		return *this / magnitude();
+	}
+	
+	void normalize()
+	{
+		*this /= magnitude();
 	}
 	
 	float &operator[](int index)
@@ -119,6 +190,11 @@ public:
 	void print() const
 	{
 		printf("%f %f %f\n", fValues[0], fValues[1], fValues[2]);
+	}
+	
+	float dot( const Vec3 vec ) const
+	{
+		return fValues[0] * vec.fValues[0] + fValues[1] * vec.fValues[1] + fValues[2] * vec.fValues[2];
 	}
 
 private:
