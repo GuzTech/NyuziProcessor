@@ -139,10 +139,10 @@ int main()
 	const Vec3 downLeft(  -HALF_VS_WIDTH, -HALF_VS_HEIGHT, -6.298f );
 	const Vec3 downRight(  HALF_VS_WIDTH, -HALF_VS_HEIGHT, -6.298f );
 	
-	const Vec3 UL = cam->mViewMatrix * upLeft;
-	const Vec3 UR = cam->mViewMatrix * upRight;
-	const Vec3 DL = cam->mViewMatrix * downLeft;
-	//const Vec3 DR = cam->mViewMatrix * downRight;
+	const Vec3_16 UL = Vec3_16( cam->mViewMatrix * upLeft );
+	const Vec3_16 UR = Vec3_16( cam->mViewMatrix * upRight );
+	const Vec3_16 DL = Vec3_16( cam->mViewMatrix * downLeft );
+	//const Vec3 DR_16 = Vec3_16( cam->mViewMatrix * downRight );
 
 	Ray16 r;			
 	r.origin = Vec3_16( cam->vPosition );
@@ -150,6 +150,7 @@ int main()
 	// fire a ray for every pixel
 	for( unsigned short y = 0; y < FB_HEIGHT; y++ )
 	{
+		printf( "1\n" );
 		const Vec3_16 dy( ( ( UL - DL ) / (float)FB_HEIGHT ) * y );
 		
 		// Point to the new line in the framebuffer
@@ -157,17 +158,21 @@ int main()
 		
 		for( unsigned short x = 0; x < FB_WIDTH; x += 16 )
 		{
+			printf( "2\n" );
 			// Point to the new pixel in the framebuffer
 			//vecu16_t *ptr = ( vecu16_t * )( kFbBase + ( y * FB_WIDTH + x ) * 4 );
 			
 			const Vec3_16 dx( ( ( UR - UL ) / (float)FB_WIDTH ) * x );
 			
+			printf( "3\n" );
 			// set the direction vector and normalize it
-			const Vec3_16 dir = Vec3_16( UL ) + dx - dy - r.origin;
+			const Vec3_16 dir = UL + dx - dy - r.origin;
 			
+			printf( "4\n" );
 			// Construct a ray
 			r.direction = dir.normalized();
 
+			printf( "Raytrace\n" );
 			// trace the ray
 			Color16 color = Color16::ToColor( raytrace( r, 1 ) );
 			
@@ -208,6 +213,8 @@ Vec3_16 raytrace( Ray16 r, int q )
 	// check for every primitive if it intersects with the ray
 	for( uint32_t i = 0; i < 2; ++i )
 	{
+		printf( "Checking primitive %i\n", i );
+		
 		temphit = spheres[ i ]->Intersect( r, tempdist, tempdist2 );
 		int activeLanes = 0xFFFF;
 		activeLanes &= mask_cmpf_lt( tempdist, distance );
