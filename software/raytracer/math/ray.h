@@ -20,25 +20,44 @@
 #define RAY_H
 
 #include <stdio.h>
-#include "Vec3.h"
+#include <Vec3.h>
+#include "vec3_16.h"
+#include "vec_math.h"
 
 using namespace librender;
 
 class Ray
 {
 public:
-	Ray()
+	Ray( void )
 	:	origin( 0.0f, 0.0f, 0.0f ),
 		direction( 0.0f, 0.0f, 0.0f )
 	{}
 	
-	Ray( Vec3 orig, Vec3 dir )
+	Ray( const Vec3 orig, const Vec3 dir )
 	:	origin( orig ),
 		direction( dir )
 	{}
 
 	Vec3 origin;
 	Vec3 direction;
+};
+
+class Ray16
+{
+public:
+	Ray16( void )
+	:	origin( Vec3_16() ),
+		direction( Vec3_16() )
+	{}
+	
+	Ray16( const Vec3_16 orig, const Vec3_16 dir )
+	:	origin( orig ),
+		direction( dir )
+	{}
+	
+	Vec3_16 origin;
+	Vec3_16 direction;
 };
 
 #endif

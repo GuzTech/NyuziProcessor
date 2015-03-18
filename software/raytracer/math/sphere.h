@@ -38,6 +38,12 @@ public:
 		radiusSq( radius * radius )
 	{}
 	
+	void SetColor( const Vec3 color )
+	{
+		this->color = color;
+		color16 = Vec3_16( color );
+	}
+	
 	// Checks if a ray intersects with this sphere.
 	// Returns true if the ray intersects with this sphere, otherwise returns false.
 	//
@@ -46,15 +52,20 @@ public:
 	//				  intersection.
 	// dist2	[OUT] The distance between the ray position and the second point of
 	//				  intersection.
+	__attribute__((overloadable))
 	bool Intersect( const Ray ray, float &dist1, float &dist2 );
+	
+	__attribute__((overloadable))
+	uint32_t Intersect( const Ray16 ray, vecf16_t &dist1, vecf16_t &dist2 );
 	
 	Vec3  position;
 	float radius;
 	float radiusSq;		// Radius squared
 	
-	Vec3  color;
-	float reflectivity;
-	float specular;
+	Vec3	color;
+	Vec3_16	color16;
+	float	reflectivity;
+	float	specular;
 };
 
 #endif // SPHERE_H

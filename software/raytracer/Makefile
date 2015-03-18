@@ -22,19 +22,22 @@ LIBOSDIR=$(TOPDIR)/software/libos
 LIBRENDERDIR=$(TOPDIR)/software/librender
 BINDIR=$(TOPDIR)/bin
 COMPILER_DIR=/usr/local/llvm-nyuzi/bin
-CC=$(COMPILER_DIR)/clang
+CC=$(COMPILER_DIR)/clang++
 ELF2HEX=$(COMPILER_DIR)/elf2hex
 EMULATOR=$(BINDIR)/emulator
 CFLAGS=-g -Wall -W -O3 -fno-rtti -std=c++11 -I$(LIBCDIR)/include -I$(LIBOSDIR) -I$(LIBRENDERDIR)
 BASE_ADDRESS=0
 LIBS=$(LIBCDIR)/crt0.o $(LIBCDIR)/libc.a $(LIBOSDIR)/libos.a $(LIBRENDERDIR)/librender.a
 
+assemble:
+	@echo "Assembling raytracer.cpp"
+	$(CC) -S -g -Wall -W -fno-rtti -std=c++11 -I$(LIBCDIR)/include -I$(LIBOSDIR) -I$(LIBRENDERDIR) raytracer.cpp
+
 all: raytracer.hex
-	
 
 raytracer.elf:
 	@echo "Building raytracer.cpp"
-	$(CC) $(CFLAGS) raytracer.cpp math/sphere.cpp graphics/camera.cpp $(LIBS) -o raytracer.elf
+	$(CC) $(CFLAGS) raytracer.cpp math/vec_math.cpp math/sphere.cpp graphics/camera.cpp $(LIBS) -o raytracer.elf
 
 raytracer.hex: raytracer.elf
 	@echo "Creating raytracer.hex"
@@ -45,5 +48,5 @@ run: raytracer.hex
 	$(EMULATOR) -f 800x600 -t 1 raytracer.hex
 
 clean:
-	rm -f raytracer.elf raytracer.hex *.o
+	rm -f raytracer.elf raytracer.hex *.o *.s
 

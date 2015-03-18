@@ -59,3 +59,8 @@ bool Sphere::Intersect( const Ray ray, float &dist1, float &dist2 )
 	
 	return true;
 }
+
+uint32_t Sphere::Intersect( const Ray16 ray, vecf16_t &dist1, vecf16_t &dist2 )
+{
+	return 0;
+}
