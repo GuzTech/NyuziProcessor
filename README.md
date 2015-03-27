@@ -47,11 +47,20 @@ Here is the command line for Ubuntu:
 On Ubuntu, you must be on 14.10 or later to get the proper version of verilator.  This requires the
 [universe](https://help.ubuntu.com/community/Repositories/Ubuntu) repository to be enabled.
 
-    sudo apt-get verilator
+    sudo apt-get install verilator
 
 Bug  fixes in more recent versions of verilator are necessary for this to run correctly, so you
 will need to rebuild from source if your package manager doesn't have the proper version (use verilator 
---version to check)
+--version to check). If you need to rebuild, you can download the tar file from the following link:
+
+http://www.veripool.org/projects/verilator/wiki/Installing
+
+After you downloaded the tar file, you have to uncompress the file, then:
+
+    cd "directory where you uncompressed"
+    ./configure
+    make
+    sudo make install
 
 ### MacOS
 
@@ -65,7 +74,7 @@ To install the remaining packages, I would recommend a package manager like
 
     sudo port install imagemagick libsdl2
     
-You will need to build verilator from source.
+You will need to build verilator from source using instructions above.
 
 ### Windows
 

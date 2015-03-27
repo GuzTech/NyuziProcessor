@@ -29,14 +29,14 @@ namespace {
 // color channels.
 void unpackRGBA(veci16_t packedColor, vecf16_t outColor[3])
 {
-	outColor[kColorR] = __builtin_nyuzi_vitof(packedColor & splati(255))
+	outColor[kColorR] = __builtin_convertvector(packedColor & splati(255), vecf16_t)
 		/ splatf(255.0f);
-	outColor[kColorG] = __builtin_nyuzi_vitof((packedColor >> splati(8)) & splati(255)) 
-		/ splatf(255.0f);
-	outColor[kColorB] = __builtin_nyuzi_vitof((packedColor >> splati(16)) & splati(255)) 
-		/ splatf(255.0f);
-	outColor[kColorA] = __builtin_nyuzi_vitof((packedColor >> splati(24)) & splati(255)) 
-		/ splatf(255.0f);
+	outColor[kColorG] = __builtin_convertvector((packedColor >> splati(8)) & splati(255),
+		vecf16_t) / splatf(255.0f);
+	outColor[kColorB] = __builtin_convertvector((packedColor >> splati(16)) & splati(255),
+		vecf16_t) / splatf(255.0f);
+	outColor[kColorA] = __builtin_convertvector((packedColor >> splati(24)) & splati(255),
+		vecf16_t) / splatf(255.0f);
 }
 
 }
@@ -77,7 +77,7 @@ void Texture::readPixels(vecf16_t u, vecf16_t v, unsigned short mask,
 	// Determine the closest mip-level. Determine the pitch between the top
 	// two pixels. The reciprocal of this is the scaled texture size. log2 of this
 	// is the mip level.
-	int mipLevel = __builtin_clz(int(1.0f / fabs_f(u[1] - u[0]))) - fBaseMipBits;
+	int mipLevel = __builtin_clz(int(1.0f / __builtin_fabsf(u[1] - u[0]))) - fBaseMipBits;
 	if (mipLevel > fMaxMipLevel)
 		mipLevel = fMaxMipLevel;
 	else if (mipLevel < 0)
@@ -94,8 +94,8 @@ void Texture::readPixels(vecf16_t u, vecf16_t v, unsigned short mask,
 	// the absfv is quick and dirty.
 	vecf16_t uRaster = absfv(fracfv(u)) * splatf(mipWidth - 1);
 	vecf16_t vRaster = (splatf(1.0) - absfv(fracfv(v))) * splatf(mipHeight - 1);
-	veci16_t tx = __builtin_nyuzi_vftoi(uRaster);
-	veci16_t ty = __builtin_nyuzi_vftoi(vRaster);
+	veci16_t tx = __builtin_convertvector(uRaster, veci16_t);
+	veci16_t ty = __builtin_convertvector(vRaster, veci16_t);
 
 	if (fEnableBilinearFiltering)
 	{
